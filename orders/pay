@@ -1,0 +1,76 @@
+import express, { Request, Response } from 'express'
+import { body } from 'express-validator'
+import {
+  requireAuth,
+  validateRequest,
+  BadRequestError,
+  NotAuthorizedError,
+  NotFoundError,
+  OrderStatus
+} from '@kiutickets/common'
+import { Order } from '../models/order'
+import mercadopago from 'mercadopago'
+import { Payment } from '../models/payment'
+import { PaymentCreatedPublisher } from '../events/publishers/payment-created-publisher'
+import { natsWrapper } from '../nats-wrapper'
+mercadopago.configure({
+  access_token: process.env.MERCADO_KEY!
+})
+
+const router = express.Router()
+
+router.post(
+  '/api/payments',
+  requireAuth,
+  [
+    body('orderId')
+      .not()
+      .isEmpty()
+  ],
+  validateRequest,
+  async (req: Request, res: Response) => {
+    const { orderId, external_reference, title, price } = req.body
+    // const { orderId, title } = req.body
+    console.log(orderId)
+
+    const order = await Order.findById(orderId)
+
+    if (!order) {
+      throw new NotFoundError()
+    }
+    if (order.userId !== req.currentUser!.id) {
+      throw new NotAuthorizedError()
+    }
+    if (order.status === OrderStatus.Cancelled) {
+      throw new BadRequestError('Cannot pay for an cancelled order')
+    }
+
+    let preference = {
+      external_reference,
+      items: [
+        {
+          title,
+          unit_price: price,
+          quantity: 1
+        }
+      ]
+      // redirect_urls: {}
+    }
+    const charge = await mercadopago.preferences.create(preference)
+    const { body } = charge
+    const { id } = body
+    const payment = Payment.build({
+      orderId,
+      mercadoId: id
+    })
+    await payment.save()
+    await new PaymentCreatedPublisher(natsWrapper.client).publish({
+      id: payment.id,
+      orderId: payment.orderId,
+      mercadoId: id
+    })
+    res.send(payment)
+  }
+)
+
+export { router as createChargeRouter }

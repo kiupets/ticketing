@@ -1,0 +1,29 @@
+[
+    {
+        "id": 810539318,
+        "nickname": "TETE5005314",
+        "password": "qatest5094",
+        "site_status": "active",
+        "email": "test_user_98712276@testuser.com",
+        "credentials":{
+            "access_token": "APP_USR-8218825195711113-081920-d908bb0d9a938f1595b11a266856bbf2-810539318",
+            "public_key": "APP_USR-b923b68d-039d-4623-8dd8-5ac3a6f817ef",
+            "client_id": "8218825195711113",
+            "client_secret":"AQBJWcEDjsHsIGDlcYKxslx7H9C3GDCV"
+        }
+
+    },
+    {
+        "id": 810539486,
+        "nickname": "TT159433",
+        "password": "qatest3146",
+        "site_status": "active",
+        "email": "test_user_16330620@testuser.com",
+        "credentials":{
+            "access_token": "APP_USR-3094173527134208-081921-82c5ad2f0e94048d5f232a002cd3b0d0-810539486",
+            "public_key": "APP_USR-7fe77c24-0f82-4e0f-a729-a40fd61b9851",
+            "client_id": "3094173527134208",
+            "client_secret":"qGkhwr5qXZt7An0gBjC5BataLrEvURf0"
+        }
+    }
+]
