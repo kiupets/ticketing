@@ -12,6 +12,7 @@
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
       "./src/test/setup.ts"
+      
     ]
   },
   "keywords": [],
