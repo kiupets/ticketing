@@ -17,7 +17,8 @@ import { natsWrapper } from '../nats-wrapper'
 const router = express.Router()
 
 mercadopago.configure({
-  access_token: process.env.MERCADO_KEY!
+  access_token:
+    'APP_USR-8218825195711113-081920-d908bb0d9a938f1595b11a266856bbf2-810539318'
 })
 
 router.post(

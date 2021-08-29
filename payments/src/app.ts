@@ -4,7 +4,7 @@ import { json } from 'body-parser'
 import cookieSession from 'cookie-session'
 import { errorHandler, NotFoundError, currentUser } from '@kiutickets/common'
 import { createChargeRouter } from './routes/new'
-import { mercadoRouter } from './routes/mer'
+// import { mercadoRouter } from './routes/mer'
 
 const app = express()
 app.set('trust proxy', true)
@@ -17,7 +17,7 @@ app.use(
 )
 app.use(currentUser)
 
-app.use(mercadoRouter)
+// app.use(mercadoRouter)
 app.use(createChargeRouter)
 
 app.all('*', async (req, res) => {
